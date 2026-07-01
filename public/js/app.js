@@ -10,16 +10,22 @@ $(document).ready(function () {
         e.preventDefault();
 
         let form = $(this);
+        let title = $('#task-title').val().trim();
 
+        if (!title) {
+            $('#title-error').text('Task title is required.');
+            return;
+        }
         $.ajax({
             url: form.attr('action'),
             method: 'POST',
             data: form.serialize(),
             success: function (response) {
+                $('#title-error').text('');
                 let task = response.task;
 
                 $('#task-list').prepend(`
-                    <li class="list-group-item task-item rounded-4 mb-3 border-0 shadow-sm d-flex align-items-center gap-3 task-item ${task.is_completed ? 'task-completed' : ''}"
+                    <li class="list-group-item rounded-4 mb-3 border-0 shadow-sm d-flex align-items-center gap-3 task-item ${task.is_completed ? 'task-completed' : ''}"
                         data-id="${task.id}">
 
                         <input
@@ -53,6 +59,13 @@ $(document).ready(function () {
                 $('.empty-tasks').addClass('d-none');
             },
             error: function (xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    $('#title-error').text(errors.title[0]);
+                    return;
+                }
+
                 alert('Something went wrong');
                 console.log(xhr.responseText);
             }

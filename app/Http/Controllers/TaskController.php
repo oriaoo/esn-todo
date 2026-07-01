@@ -17,6 +17,10 @@ class TaskController extends Controller
     public function store(Request $request)
     {
 
+        // למנוע בעיית רווחים שיגזור קצוות
+        $request->merge([
+            'title' => trim($request->title),
+        ]);
         // מוודא שהמשתמש הזין כותרת למשימה
         $request->validate([
             'title' => 'required|string|max:255',

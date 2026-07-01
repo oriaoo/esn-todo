@@ -26,13 +26,14 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-pencil-square"></i>
                                 </span>
-                                <input type="text" class="form-control" id="task-title" name="title"
+                                <input type="text" class="form-control py-3" id="task-title" name="title"
                                     placeholder="What do you need to do?">
                                 <button class="btn btn-success">
                                     <i class="bi bi-plus-lg me-1"></i>
                                     Add
                                 </button>
                             </div>
+                            <div id="title-error" class="text-danger small mt-1"></div>
                         </form>
                         <div class="btn-group w-100 mb-4">
                             <button class="btn btn-success filter-option py-2" data-filter="all">
@@ -52,7 +53,7 @@
                             @foreach ($tasks as $task)
                                 <li class="list-group-item task-item rounded-4 mb-3 border-0 shadow-sm d-flex align-items-center gap-3 {{ $task->is_completed ? 'task-completed' : '' }}"
                                     data-id="{{ $task->id }}">
-                                    <input class="form-check-input task-toggle" type="checkbox"
+                                    <input class="form-check-input  task-toggle" type="checkbox"
                                         data-id="{{ $task->id }}" {{ $task->is_completed ? 'checked' : '' }}>
                                     <span class="task-title flex-grow-1">
                                         {{ $task->title }}
