@@ -72,3 +72,24 @@ $(document).on('change', '.task-toggle', function () {
         }
     });
 });
+
+$(document).on('click', '.delete-task', function () {
+    let button = $(this);
+    let id = button.data('id');
+    let item = button.closest('.task-item');
+
+    $.ajax({
+        url: '/tasks/' + id,
+        method: 'DELETE',
+        success: function () {
+            item.remove();
+
+            if ($('#task-list .task-item').length === 0) {
+                $('.empty-tasks').removeClass('d-none');
+            }
+        },
+        error: function () {
+            alert('Could not delete task');
+        }
+    });
+});
