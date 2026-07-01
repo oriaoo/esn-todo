@@ -19,7 +19,7 @@ $(document).ready(function () {
                 let task = response.task;
 
                 $('#task-list').prepend(`
-                    <li class="list-group-item d-flex align-items-center gap-3 task-item ${task.is_completed ? 'task-completed' : ''}"
+                    <li class="list-group-item task-item rounded-4 mb-3 border-0 shadow-sm d-flex align-items-center gap-3 task-item ${task.is_completed ? 'task-completed' : ''}"
                         data-id="${task.id}">
 
                         <input
@@ -35,15 +35,15 @@ $(document).ready(function () {
 
                         <button
                             type="button"
-                            class="btn btn-sm btn-outline-primary edit-task"
+                            class="btn btn-light edit-task"
                             data-id="${task.id}">
-                            Edit
+                            <i class="bi bi-pencil"></i>
                         </button>
                         <button
                             type="button"
-                            class="btn btn-sm btn-outline-danger delete-task"
+                            class="btn btn-light text-danger delete-task"
                             data-id="${task.id}">
-                            Delete
+                            <i class="bi bi-trash"></i>
                         </button>
                     </li>
                 `);
@@ -172,12 +172,12 @@ $('.filter-option').on('click', function () {
     let filter = selectedButton.data('filter');
 
     $('.filter-option')
-        .removeClass('btn-primary active')
-        .addClass('btn-outline-primary');
+        .removeClass('btn-success active')
+        .addClass('btn-outline-success');
 
     selectedButton
-        .removeClass('btn-outline-primary')
-        .addClass('btn-primary active');
+        .removeClass('btn-outline-success')
+        .addClass('btn-success active');
 
     $('.task-item').each(function () {
         let item = $(this);
@@ -193,4 +193,12 @@ $('.filter-option').on('click', function () {
             item.addClass('d-none');
         }
     });
+
+    let visibleTasks = $('.task-item:not(.d-none)').length;
+
+if (visibleTasks === 0) {
+    $('.empty-tasks').removeClass('d-none');
+} else {
+    $('.empty-tasks').addClass('d-none');
+}
 });

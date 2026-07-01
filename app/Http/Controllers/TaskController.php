@@ -37,7 +37,7 @@ class TaskController extends Controller
 
     public function toggle(Task $task)
     {
-
+        // מקבל את המשימה ומעדכן את הסטטוס שלה
         $task->is_completed = !$task->is_completed;
         $task->save();
 
