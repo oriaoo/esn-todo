@@ -55,4 +55,20 @@ class TaskController extends Controller
             'success' => true
         ]);
     }
+
+    public function update(Request $request, Task $task)
+    {
+        // מוודא שהמשתמש הזין כותרת למשימה
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $task->title = $request->title;
+        $task->save();
+
+        return response()->json([
+            'success' => true,
+            'task' => $task
+        ]);
+    }
 }

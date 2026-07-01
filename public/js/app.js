@@ -35,6 +35,12 @@ $(document).ready(function () {
 
                         <button
                             type="button"
+                            class="btn btn-sm btn-outline-primary edit-task"
+                            data-id="${task.id}">
+                            Edit
+                        </button>
+                        <button
+                            type="button"
                             class="btn btn-sm btn-outline-danger delete-task"
                             data-id="${task.id}">
                             Delete
@@ -93,3 +99,68 @@ $(document).on('click', '.delete-task', function () {
         }
     });
 });
+
+$(document).on('click', '.edit-task', function () {
+    // תופסים את השורה של המשימה ואת הכותרת הנוכחית
+    let button = $(this);
+    let id = button.data('id');
+    let item = button.closest('.task-item');
+    let titleSpan = item.find('.task-title');
+    let currentTitle = titleSpan.text().trim();
+
+
+    // יוצר אינוט לעריכה ומכניס את הטקסט הנוכחי מחליף את הspan לאינפוט  כדי שהמשתמש יראה שדה עריכה
+    let inputField = $(`
+        <input type="text" class="form-control form-control-sm flex-grow-1 edit-task-input">
+    `);
+
+    inputField.val(currentTitle);
+    titleSpan.replaceWith(inputField);
+    inputField.focus();
+
+   inputField.on('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        saveTask(inputField, id, currentTitle);
+    }
+
+    if (e.key === 'Escape') {
+        inputField.replaceWith(`<span class="task-title flex-grow-1">${currentTitle}</span>`);
+    }
+});
+
+inputField.on('blur', function () {
+    saveTask(inputField, id, currentTitle);
+});
+});
+
+
+
+// פונקציה לשמירת העריכה של המשימה בלחיצה מחוץ לאינפוט או אינטר
+// לחיצה על esc תבטל את הפעולה
+function saveTask(inputField, id, currentTitle) {
+    let newTitle = inputField.val().trim();
+
+    if (!newTitle) {
+        inputField.replaceWith(`<span class="task-title flex-grow-1">${currentTitle}</span>`);
+        return;
+    }
+
+    $.ajax({
+        url: '/tasks/' + id,
+        method: 'PUT',
+        data: {
+            title: newTitle
+        },
+        success: function (response) {
+            inputField.replaceWith(`
+                <span class="task-title flex-grow-1">${response.task.title}</span>
+            `);
+        },
+        error: function () {
+            inputField.replaceWith(`
+                <span class="task-title flex-grow-1">${currentTitle}</span>
+            `);
+        }
+    });
+}

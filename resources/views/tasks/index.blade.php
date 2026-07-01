@@ -34,6 +34,10 @@
                                         {{ $task->title }}
                                     </span>
 
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-task"
+                                        data-id="{{ $task->id }}">
+                                        Edit
+                                    </button>
                                     <button type="button" class="btn btn-sm btn-outline-danger delete-task"
                                         data-id="{{ $task->id }}">
                                         Delete
