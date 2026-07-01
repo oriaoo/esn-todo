@@ -164,3 +164,33 @@ function saveTask(inputField, id, currentTitle) {
         }
     });
 }
+
+
+// סינון המשימות לפי הסטטוס שנבחר
+$('.filter-option').on('click', function () {
+    let selectedButton = $(this);
+    let filter = selectedButton.data('filter');
+
+    $('.filter-option')
+        .removeClass('btn-primary active')
+        .addClass('btn-outline-primary');
+
+    selectedButton
+        .removeClass('btn-outline-primary')
+        .addClass('btn-primary active');
+
+    $('.task-item').each(function () {
+        let item = $(this);
+        let isCompleted = item.hasClass('task-completed');
+
+        if (filter === 'all') {
+            item.removeClass('d-none');
+        } else if (filter === 'completed' && isCompleted) {
+            item.removeClass('d-none');
+        } else if (filter === 'active' && !isCompleted) {
+            item.removeClass('d-none');
+        } else {
+            item.addClass('d-none');
+        }
+    });
+});

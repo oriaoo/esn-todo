@@ -22,6 +22,19 @@
                                 </button>
                             </div>
                         </form>
+                        <div class="btn-group mb-3" role="group">
+                            <button type="button" class="btn btn-primary filter-option active" data-filter="all">
+                                All
+                            </button>
+
+                            <button type="button" class="btn btn-outline-primary filter-option" data-filter="active">
+                                Active
+                            </button>
+
+                            <button type="button" class="btn btn-outline-primary filter-option" data-filter="completed">
+                                Completed
+                            </button>
+                        </div>
                         <ul class="list-group" id="task-list">
                             @forelse ($tasks as $task)
                                 <li class="list-group-item d-flex align-items-center gap-3 task-item {{ $task->is_completed ? 'task-completed' : '' }}"
