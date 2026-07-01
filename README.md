@@ -2,7 +2,7 @@
 
 ![Application Screenshot](screenshot.png)
 
-A simple Todo List application built as part of the ESN technical assignment using Laravel, MySQL, Bootstrap and jQuery
+A simple Todo List application built using Laravel, MySQL, Bootstrap and jQuery
 
 ## Features
 
