@@ -1,3 +1,10 @@
+// CSRF token לבקשות ajax
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 $(document).ready(function () {
     $('#task-form').on('submit', function (e) {
         e.preventDefault();
@@ -12,27 +19,56 @@ $(document).ready(function () {
                 let task = response.task;
 
                 $('#task-list').prepend(`
-                    <li class="list-group-item d-flex justify-content-between align-items-center" data-id="${task.id}">
-                        <span>${task.title}</span>
+                    <li class="list-group-item d-flex align-items-center gap-3 task-item ${task.is_completed ? 'task-completed' : ''}"
+                        data-id="${task.id}">
 
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-success toggle-task">
-                                Done
-                            </button>
+                        <input
+                            class="form-check-input task-toggle m-0"
+                            type="checkbox"
+                            data-id="${task.id}"
+                            ${task.is_completed ? 'checked' : ''}
+                        >
 
-                            <button class="btn btn-sm btn-outline-danger delete-task">
-                                Delete
-                            </button>
-                        </div>
+                        <span class="task-title flex-grow-1">
+                            ${task.title}
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger delete-task"
+                            data-id="${task.id}">
+                            Delete
+                        </button>
                     </li>
                 `);
 
                 form[0].reset();
+
+                $('.empty-tasks').addClass('d-none');
             },
             error: function (xhr) {
                 alert('Something went wrong');
                 console.log(xhr.responseText);
             }
         });
+    });
+});
+
+$(document).on('change', '.task-toggle', function () {
+    let checkbox = $(this);
+    let id = checkbox.data('id');
+    let item = checkbox.closest('.task-item');
+
+    $.ajax({
+        url: '/tasks/' + id + '/toggle',
+        method: 'POST',
+        success: function (response) {
+            item.toggleClass('task-completed', response.task.is_completed);
+            checkbox.prop('checked', response.task.is_completed);
+        },
+        error: function () {
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            alert('Could not update task status');
+        }
     });
 });

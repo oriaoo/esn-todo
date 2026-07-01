@@ -22,34 +22,25 @@
                                 </button>
                             </div>
                         </form>
-
                         <ul class="list-group" id="task-list">
                             @forelse ($tasks as $task)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span
-                                        class="{{ $task->is_completed ? 'text-decoration-line-through text-muted' : '' }}">
+                                <li class="list-group-item d-flex align-items-center gap-3 task-item {{ $task->is_completed ? 'task-completed' : '' }}"
+                                    data-id="{{ $task->id }}">
+
+                                    <input class="form-check-input task-toggle m-0" type="checkbox"
+                                        data-id="{{ $task->id }}" {{ $task->is_completed ? 'checked' : '' }}>
+
+                                    <span class="task-title flex-grow-1">
                                         {{ $task->title }}
                                     </span>
 
-                                    <div class="d-flex gap-2">
-                                        <form action="{{ route('tasks.toggle', $task) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-success">
-                                                {{ $task->is_completed ? 'Undo' : 'Done' }}
-                                            </button>
-                                        </form>
-
-                                        <form action="{{ route('tasks.destroy', $task) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-task"
+                                        data-id="{{ $task->id }}">
+                                        Delete
+                                    </button>
                                 </li>
                             @empty
-                                <li class="list-group-item text-center text-muted">
+                                <li class="list-group-item text-center text-muted empty-tasks">
                                     No tasks yet.
                                 </li>
                             @endforelse
